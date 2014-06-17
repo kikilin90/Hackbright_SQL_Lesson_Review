@@ -55,12 +55,15 @@ def add_new_grade(student_github, project_title, grade):
     CONN.commit()
     print "Successfully added a new grade to project"
 
-def grades_for_student(student_github):
-    query = """SELECT * FROM Grades WHERE student_github=?"""
-    DB.execute(query, (student_github,))
+def grades_for_student(first_name, last_name):
+    query = """SELECT first_name, last_name, project_title, grade 
+        FROM Grades 
+        INNER JOIN Students ON (github=student_github) 
+        WHERE first_name= ? AND last_name = ? """
+    DB.execute(query, (first_name, last_name))
     row = DB.fetchall()
     for i in range(len(row)):
-        print "%s's grade for %s is %d" % (row[i][0], row[i][1], row[i][2])
+        print "%s %s's grade for %s is %d" % (row[i][0], row[i][1], row[i][2], row[i][3])
 
 def main():
     connect_to_db()
