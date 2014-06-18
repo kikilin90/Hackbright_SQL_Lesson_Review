@@ -1,0 +1,12 @@
+<html>
+<body>
+<h1>Student Grades for {{firstname}} {{lastname}}</h1>
+<ul>
+    {% for row in rows %}
+        <li>{{row.projecttitle}}</li>
+        <li>{{row.grade}}</li>
+        <hr>
+    {% endfor %}
+</ul>
+</body>
+</html>

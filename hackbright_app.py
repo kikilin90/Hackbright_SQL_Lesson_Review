@@ -7,15 +7,7 @@ def get_student_by_github(github):
     query = """SELECT first_name, last_name, github FROM Students WHERE github = ?"""
     DB.execute(query, (github,))
     row = DB.fetchone()
-    student_dict = {}
-
-    student_dict["first name"] = row[0]
-    student_dict["last name"] = row[1]
-    student_dict["github"] = row[2]
-
-    print """\
-    Student: %s %s
-    Github account: %s"""%(student_dict["first name"], student_dict["last name"], student_dict["github"])
+    return row
 
 def connect_to_db():
     global DB, CONN
@@ -78,17 +70,20 @@ def grades_for_student(first_name, last_name):
     query = """SELECT first_name, last_name, project_title, grade 
         FROM Grades 
         INNER JOIN Students ON (github=student_github) 
-        WHERE first_name= ? AND last_name = ? """
+        WHERE first_name=? AND last_name=?"""
     DB.execute(query, (first_name, last_name))
-    my_dictionary = {}
+    new_list = []
     row = DB.fetchall()
 
     for i in row:
-        my_dictionary["first name"] = i[0]
-        my_dictionary["last name"] = i[1]
-        my_dictionary["project title"] = i[2]
+        my_dictionary = {}
+        my_dictionary["firstname"] = i[0]
+        my_dictionary["lastname"] = i[1]
+        my_dictionary["projecttitle"] = i[2]
         my_dictionary["grade"] = i[3]
-        print "%s %s's grade for %s is %d" % (my_dictionary["first name"], my_dictionary["last name"], my_dictionary["project title"], my_dictionary["grade"])
+        new_list.append(my_dictionary)
+
+    return new_list
 
 def main():
     connect_to_db()
